@@ -37,6 +37,7 @@ function About() {
         {`
           body {
             background-color: #022c43;
+            margin: 0;
           }
           #__next, body, html {
             height: 100%;
