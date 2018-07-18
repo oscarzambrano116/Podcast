@@ -18,7 +18,7 @@ class Index extends Component {
         <div className="channels">
           {
             channels.map((channel) => (
-              <Link href={'channel'} prefetch>
+              <Link href={`/channel?id=${channel.id}`} prefetch>
                 <a key={channel.id} className={'channel'}>
                   <img src={channel.urls.logo_image.original} alt="Logo"/>
                   <h2>{channel.title}</h2>
@@ -46,6 +46,12 @@ class Index extends Component {
               border-radius: 3px;
               box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
               margin-bottom: 0.5em;
+            }
+            a.channel {
+              display: block;
+              margin-bottom: 0.5em;
+              color: #333;
+              text-decoration: none;
             }
             .channel img {
               width: 100%;
