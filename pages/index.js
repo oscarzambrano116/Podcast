@@ -18,8 +18,8 @@ class Index extends Component {
         <div className="channels">
           {
             channels.map((channel) => (
-              <Link href={`/channel?id=${channel.id}`} prefetch>
-                <a key={channel.id} className={'channel'}>
+              <Link href={`/channel?id=${channel.id}`} prefetch key={channel.id}>
+                <a className={'channel'}>
                   <img src={channel.urls.logo_image.original} alt="Logo"/>
                   <h2>{channel.title}</h2>
                 </a>
