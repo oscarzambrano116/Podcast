@@ -1,3 +1,4 @@
+import 'isomorphic-fetch';
 import React, { Component } from 'react';
 import Link from 'next/link';
 
@@ -20,7 +21,11 @@ class Channel extends Component {
     const dataSeries = await reqSeries.json();
     const series = dataSeries.body.channels;
 
-    return { channel, audioClips, series };
+    return {
+      channel,
+      audioClips,
+      series,
+    };
   }
 
   render() {
@@ -93,6 +98,9 @@ class Channel extends Component {
              margin-bottom: 0.5em;
              color: #333;
              text-decoration: none;
+           }
+           .channel {
+            min-height: 170px;
            }
            .channel img {
              border-radius: 3px;
