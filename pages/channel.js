@@ -1,34 +1,56 @@
 import 'isomorphic-fetch';
 import React, { Component } from 'react';
-import Link from 'next/link';
+import Error from 'next/error';
+
 import Layout from '../components/Layout';
 import ChannelGrid from '../components/ChannelGrid';
 import PodcastList from '../components/PodcastList';
 
 class Channel extends Component {
-  static async getInitialProps ({ query }) {
+  static async getInitialProps ({ query, res }) {
     const channelId = query.id;
 
-    const [reqChannel, reqAudios, reqSeries] = await Promise.all([
-      fetch(`https://api.audioboom.com/channels/${channelId}`),
-      fetch(`https://api.audioboom.com/channels/${channelId}/audio_clips`),
-      fetch(`https://api.audioboom.com/channels/${channelId}/child_channels`),
-    ])
+    try {
+      const [reqChannel, reqAudios, reqSeries] = await Promise.all([
+        fetch(`https://api.audioboom.com/channels/${channelId}`),
+        fetch(`https://api.audioboom.com/channels/${channelId}/audio_clips`),
+        fetch(`https://api.audioboom.com/channels/${channelId}/child_channels`),
+      ])
 
-    const dataChannel = await reqChannel.json();
-    const channel = dataChannel.body.channel;
+      if (reqChannel.status >= 400) {
+        res.statusCode = reqChannel.status;
+        return {
+          channel: null,
+          audioClips: null,
+          series: null,
+          statusCode: 404,
+        };
+      }
 
-    const dataAudios = await reqAudios.json();
-    const audioClips = dataAudios.body.audio_clips;
+      const dataChannel = await reqChannel.json();
+      const channel = dataChannel.body.channel;
 
-    const dataSeries = await reqSeries.json();
-    const series = dataSeries.body.channels;
+      const dataAudios = await reqAudios.json();
+      const audioClips = dataAudios.body.audio_clips;
 
-    return {
-      channel,
-      audioClips,
-      series,
-    };
+      const dataSeries = await reqSeries.json();
+      const series = dataSeries.body.channels;
+
+      return {
+        channel,
+        audioClips,
+        series,
+        statusCode: 200,
+      };
+    } catch (e) {
+      res.statusCode = 503;
+      return {
+        channel: null,
+        audioClips: null,
+        series: null,
+        statusCode: 503,
+      };
+    }
   }
 
   render() {
@@ -36,7 +58,13 @@ class Channel extends Component {
       channel,
       audioClips,
       series,
+      statusCode,
     } = this.props;
+
+    if (statusCode !== 200) {
+      return <Error statusCode={statusCode} />
+    }
+
 
     return (
       <Layout title={channel.title}>
