@@ -48,7 +48,7 @@ class ChannelGrid extends Component {
             }
             .channel img {
               width: 100%;
-              height: 174px;
+              min-height: 174px;
             }
             h2 {
               padding: 5px;

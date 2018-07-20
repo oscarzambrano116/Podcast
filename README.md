@@ -4,7 +4,7 @@ App de podcast integrada con la api de Audioboom para curso de Next.js
 
 ![Captura de la app](./.readme-static/screenshot.png)
 
-[Ver la aplicación](https://podcast-ggkrjgdckk.now.sh/)
+[Ver la aplicación](https://podcast-zwicynhwud.now.sh/)
 
 ## ¿Cómo funciona?
 
