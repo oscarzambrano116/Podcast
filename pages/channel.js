@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 import React, { Component } from 'react';
-import Error from 'next/error';
+import Error from './_error';
 
 import Layout from '../components/Layout';
 import ChannelGrid from '../components/ChannelGrid';
