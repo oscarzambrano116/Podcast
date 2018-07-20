@@ -4,9 +4,14 @@ import Error from './_error';
 
 import Layout from '../components/Layout';
 import ChannelGrid from '../components/ChannelGrid';
-import PodcastList from '../components/PodcastList';
+import PodcastListWithClick from '../components/PodcastListWithClick';
+import PodcastPlayer from '../components/PodcastPlayer';
 
 class Channel extends Component {
+  state = {
+    openPodcast: null,
+  };
+
   static async getInitialProps ({ query, res }) {
     const channelId = query.id;
 
@@ -53,13 +58,32 @@ class Channel extends Component {
     }
   }
 
+  openPodcast = (event, podcast) => {
+    event.preventDefault();
+    this.setState({
+      openPodcast: podcast,
+    });
+  }
+
+  closePodcast = (event) => {
+    event.preventDefault();
+    this.setState({
+      openPodcast: null,
+    });
+  }
+
   render() {
     const {
-      channel,
-      audioClips,
-      series,
-      statusCode,
-    } = this.props;
+      state: {
+        openPodcast,
+      },
+      props: {
+        channel,
+        audioClips,
+        series,
+        statusCode,
+      },
+    } = this;
 
     if (statusCode !== 200) {
       return <Error statusCode={statusCode} />
@@ -69,6 +93,16 @@ class Channel extends Component {
     return (
       <Layout title={channel.title}>
         <div className="banner" style={{ backgroundImage: `url(${channel.urls.banner_image.original})` }} />
+        {
+          openPodcast && (
+            <div className={'modal'}>
+              <PodcastPlayer
+                clip={openPodcast}
+                onClose={this.closePodcast}
+              />
+            </div>
+          )
+        }
         <h1>{channel.title}</h1>
         {
           series && series.length > 0 && (
@@ -79,27 +113,38 @@ class Channel extends Component {
           )
         }
         <h2>{'Ultimos Podcasts'}</h2>
-        <PodcastList podcasts={audioClips} />
+        <PodcastListWithClick
+          podcasts={audioClips}
+          onClickPodcast={this.openPodcast}
+        />
         <style jsx>
           {`
-           .banner {
-             width: 100%;
-             padding-bottom: 25%;
-             background-position: 50% 50%;
-             background-size: cover;
-             background-color: #aaa;
-           }
-           h1 {
-             font-weight: 600;
-             padding: 15px;
-           }
-           h2 {
-             padding: 5px;
-             font-size: 0.9em;
-             font-weight: 600;
-             margin: 0;
-             text-align: center;
-           }
+            .banner {
+              width: 100%;
+              padding-bottom: 25%;
+              background-position: 50% 50%;
+              background-size: cover;
+              background-color: #aaa;
+            }
+            h1 {
+              font-weight: 600;
+              padding: 15px;
+            }
+            h2 {
+              padding: 5px;
+              font-size: 0.9em;
+              font-weight: 600;
+              margin: 0;
+              text-align: center;
+            }
+            .modal {
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              z-index: 99999;
+            }
           `}
         </style>
       </Layout>
