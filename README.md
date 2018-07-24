@@ -8,7 +8,7 @@ App de podcast integrada con la api de Audioboom para curso de Next.js
 
 ## ¿Cómo funciona?
 
-Reuire Node.js 10
+Requiere Node.js 10
 
 * `yarn install` para instalar las dependencias.
 * `yarn run dev` para entorno de desarrollo
